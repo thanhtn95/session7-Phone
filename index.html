@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    button {
+        margin-left: 3px;
+    }
+
+    tr {
+        border-style: solid;
+    }
+
+    td {
+        border-style: solid;
+    }
+</style>
+<body>
+<p id="dis"></p>
+<fieldset style="width: fit-content">
+    <legend id="name" style="font-weight: bolder"></legend>
+    <h4 id="battery">Battery: </h4>
+    <h4 id="status">Status: </h4>
+    <p id="p1">
+    </p>
+    <p id="p2"><textarea disabled></textarea></p>
+    <p id="p3">
+        <button id="save">Save</button>
+        <button>Send</button>
+    </p>
+    <p>
+    <table id="disText" style="border: 2px double; width: fit-content">
+
+    </table>
+    </p>
+    <p id="p4">
+    </p>
+
+</fieldset>
+<p>
+    <button id="showNokia" type="button" onclick="showphone(this.id)">Nokia Phone</button>
+    <button id="showIphone" type="button" onclick="showphone(this.id)">IPhone</button>
+</p>
+</body>
+<script>
+    //document.getElementById("dis").innerHTML="<fieldset style=\"width: fit-content\"></fieldset>"
+    let p1 = document.getElementById("p1");
+    let p2 = document.getElementById("p2");
+    let p3 = document.getElementById("p3");
+    let p4 = document.getElementById("p4");
+    let batt = document.getElementById("battery");
+    let name = document.getElementById("name");
+    let status = document.getElementById("status");
+    let disText = document.getElementById("disText");
+    let Phone = function (name) {
+        this.name = name;
+        this.battery = 100;
+        this.prewriteText = "";
+        this.inbox = [];
+        this.outbox = [];
+        this.status = "on";
+        this.getname = function () {
+            return this.name;
+        }
+        this.getBattery = function () {
+            return this.battery;
+        }
+        this.getPreText = function () {
+            return this.prewriteText;
+        }
+        this.getInbox = function () {
+            return this.inbox;
+        }
+        this.getOutbox = function () {
+            return this.outbox;
+        }
+        this.getStatus = function () {
+            return this.status;
+        }
+        this.checkOn = function () {
+            if (this.status == "on") {
+                this.battery -= 5;
+            }
+            return this.status;
+        }
+        this.turnOnOff = function () {
+            if (this.status == "on") {
+                this.status = "off";
+            } else {
+                this.status = "on";
+            }
+            status.innerText = "Status : " + this.status;
+        }
+        this.charge = function () {
+            let toCharge = 100 - this.battery;
+            let chargeTime = 500 * (toCharge / 5);
+            console.log(chargeTime);
+            setTimeout(function () {
+                this.battery = 100;
+                batt.innerText = "Battery: " + this.battery;
+            }, chargeTime);
+
+        }
+        this.Savewritetext = function () {
+            if (this.status == "on") {
+                let txtArea = document.getElementById("txtArea");
+                this.prewriteText = txtArea.value;
+                txtArea.value = "";
+                this.battery -= 5;
+                batt.innerText = "Batterry: " + nokia.getBattery();
+            }
+
+        }
+        this.checkInbox = function () {
+            if (this.status == "on") {
+                disText.innerHTML = '<tr><td>ID</td><td>Text Message</td></tr>';
+                if (this.name == "nokia") {
+                    for (let i = 0; i < nokia.inbox.length; i++) {
+                        disText.innerHTML += '<tr><td>' + (i + 1) + '</td><td>' + nokia.inbox[i] + '</td></tr>';
+                    }
+                    this.battery -= 5;
+                    batt.innerText = "Batterry: " + nokia.getBattery();
+                } else {
+                    for (let i = 0; i < iphone.inbox.length; i++) {
+                        disText.innerHTML += '<tr><td>' + (i + 1) + '</td><td>' + iphone.inbox[i] + '</td></tr>';
+                    }
+                    this.battery -= 5;
+                    batt.innerText = "Batterry: " + iphone.getBattery();
+                }
+            }
+        }
+        this.sendText = function () {
+            if (this.status == "on") {
+                if (this.name == "nokia") {
+                    let txtArea = document.getElementById("txtArea");
+                    iphone.inbox.push(txtArea.value);
+                    this.outbox.push(txtArea.value);
+                    txtArea.value = "";
+                    this.battery -= 5;
+                    batt.innerText = "Batterry: " + nokia.getBattery();
+                } else {
+                    let txtArea = document.getElementById("txtArea");
+                    nokia.inbox.push(txtArea.value);
+                    this.outbox.push(txtArea.value);
+                    txtArea.value = "";
+                    this.battery -= 5;
+                    batt.innerText = "Batterry: " + iphone.getBattery();
+                }
+            }
+        }
+        this.checkOutbox = function () {
+            if (this.status == "on") {
+                disText.innerHTML = '<tr><td>ID</td><td>Text Message</td></tr>';
+                if (this.name == "nokia") {
+                    for (let i = 0; i < nokia.outbox.length; i++) {
+                        disText.innerHTML += '<tr><td>' + (i + 1) + '</td><td>' + nokia.outbox[i] + '</td></tr>';
+                    }
+                    this.battery -= 5;
+                    batt.innerText = "Batterry: " + nokia.getBattery();
+                } else {
+                    for (let i = 0; i < iphone.outbox.length; i++) {
+                        disText.innerHTML += '<tr><td>' + (i + 1) + '</td><td>' + iphone.outbox[i] + '</td></tr>';
+                    }
+                    this.battery -= 5;
+                    batt.innerText = "Batterry: " + iphone.getBattery();
+                }
+
+            }
+        }
+    }
+    let nokia = new Phone("nokia");
+    let iphone = new Phone("iphone");
+
+    function showphone(id) {
+
+        if (id == "showNokia") {
+            name.innerText = nokia.getname();
+            batt.innerText = "Batterry: " + nokia.getBattery();
+            status.innerText = "Status: " + nokia.getStatus();
+            p1.innerHTML = '<button type="button" onclick="nokia.turnOnOff()">On/Off</button>';
+            p1.innerHTML += '<button type="button" onclick="nokia.charge()">Charge</button>';
+            p2.innerHTML = '<textarea id="txtArea"></textarea>';
+            p3.innerHTML = '<button type="button"  onclick="nokia.Savewritetext()">Save</button>';
+            p3.innerHTML += '<button type="button"  onclick="nokia.sendText()">Send Text</button>'
+            disText.innerHTML = '<tr><td>ID</td><td>Text Message</td></tr>'
+            p4.innerHTML = '<button type="button" onclick="nokia.checkInbox()">Inbox</button>';
+            p4.innerHTML += '<button type="button" onclick="nokia.checkOutbox()">OutBox</button>';
+        } else {
+            name.innerText = iphone.getname();
+            batt.innerText = "Batterry: " + iphone.getBattery();
+            status.innerText = "Status: " + iphone.getStatus();
+            p1.innerHTML = '<button type="button" onclick="iphone.turnOnOff()">On/Off</button>';
+            p1.innerHTML += '<button type="button" onclick="iphone.charge()">Charge</button>';
+            p2.innerHTML = '<textarea id="txtArea"></textarea>';
+            p3.innerHTML = '<button type="button"  onclick="iphone.Savewritetext()">Save</button>';
+            p3.innerHTML += '<button type="button"  onclick="iphone.sendText()">Send Text</button>'
+            disText.innerHTML = '<tr><td>ID</td><td>Text Message</td></tr>'
+            p4.innerHTML = '<button type="button" onclick="iphone.checkInbox()">Inbox</button>';
+            p4.innerHTML += '<button type="button" onclick="iphone.checkOutbox()">OutBox</button>';
+        }
+    }
+
+</script>
+</html>
