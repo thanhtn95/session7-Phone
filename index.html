@@ -109,7 +109,7 @@
                 this.prewriteText = txtArea.value;
                 txtArea.value = "";
                 this.battery -= 5;
-                batt.innerText = "Batterry: " + nokia.getBattery();
+                batt.innerText = "Batterry: " + this.getBattery();
             }
 
         }
@@ -131,6 +131,12 @@
                 }
             }
         }
+        this.loadSavedText = function () {
+            let txtArea = document.getElementById("txtArea");
+            txtArea.value = this.prewriteText;
+            this.battery -= 5;
+            batt.innerText = "Batterry: " + this.getBattery();
+        }
         this.sendText = function () {
             if (this.status == "on") {
                 if (this.name == "nokia") {
@@ -138,16 +144,14 @@
                     iphone.inbox.push(txtArea.value);
                     this.outbox.push(txtArea.value);
                     txtArea.value = "";
-                    this.battery -= 5;
-                    batt.innerText = "Batterry: " + nokia.getBattery();
                 } else {
                     let txtArea = document.getElementById("txtArea");
                     nokia.inbox.push(txtArea.value);
                     this.outbox.push(txtArea.value);
                     txtArea.value = "";
-                    this.battery -= 5;
-                    batt.innerText = "Batterry: " + iphone.getBattery();
                 }
+                this.battery -= 5;
+                batt.innerText = "Batterry: " + this.getBattery();
             }
         }
         this.checkOutbox = function () {
@@ -157,15 +161,13 @@
                     for (let i = 0; i < nokia.outbox.length; i++) {
                         disText.innerHTML += '<tr><td>' + (i + 1) + '</td><td>' + nokia.outbox[i] + '</td></tr>';
                     }
-                    this.battery -= 5;
-                    batt.innerText = "Batterry: " + nokia.getBattery();
                 } else {
                     for (let i = 0; i < iphone.outbox.length; i++) {
                         disText.innerHTML += '<tr><td>' + (i + 1) + '</td><td>' + iphone.outbox[i] + '</td></tr>';
                     }
-                    this.battery -= 5;
-                    batt.innerText = "Batterry: " + iphone.getBattery();
                 }
+                this.battery -= 5;
+                batt.innerText = "Batterry: " + this.getBattery();
 
             }
         }
@@ -183,8 +185,9 @@
             p1.innerHTML += '<button type="button" onclick="nokia.charge()">Charge</button>';
             p2.innerHTML = '<textarea id="txtArea"></textarea>';
             p3.innerHTML = '<button type="button"  onclick="nokia.Savewritetext()">Save</button>';
-            p3.innerHTML += '<button type="button"  onclick="nokia.sendText()">Send Text</button>'
-            disText.innerHTML = '<tr><td>ID</td><td>Text Message</td></tr>'
+            p3.innerHTML += '<button type="button"  onclick="nokia.loadSavedText()">Load Save Text</button>';
+            p3.innerHTML += '<button type="button"  onclick="nokia.sendText()">Send Text</button>';
+            disText.innerHTML = '<tr><td>ID</td><td>Text Message</td></tr>';
             p4.innerHTML = '<button type="button" onclick="nokia.checkInbox()">Inbox</button>';
             p4.innerHTML += '<button type="button" onclick="nokia.checkOutbox()">OutBox</button>';
         } else {
@@ -195,8 +198,9 @@
             p1.innerHTML += '<button type="button" onclick="iphone.charge()">Charge</button>';
             p2.innerHTML = '<textarea id="txtArea"></textarea>';
             p3.innerHTML = '<button type="button"  onclick="iphone.Savewritetext()">Save</button>';
-            p3.innerHTML += '<button type="button"  onclick="iphone.sendText()">Send Text</button>'
-            disText.innerHTML = '<tr><td>ID</td><td>Text Message</td></tr>'
+            p3.innerHTML += '<button type="button"  onclick="iphone.loadSavedText()">Load Save Text</button>';
+            p3.innerHTML += '<button type="button"  onclick="iphone.sendText()">Send Text</button>';
+            disText.innerHTML = '<tr><td>ID</td><td>Text Message</td></tr>';
             p4.innerHTML = '<button type="button" onclick="iphone.checkInbox()">Inbox</button>';
             p4.innerHTML += '<button type="button" onclick="iphone.checkOutbox()">OutBox</button>';
         }
