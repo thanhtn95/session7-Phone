@@ -96,7 +96,7 @@
         this.charge = function () {
             let toCharge = 100 - this.battery;
             let chargeTime = 500 * (toCharge / 5);
-            console.log(chargeTime);
+            this.battery = 100;
             setTimeout(function () {
                 this.battery = 100;
                 batt.innerText = "Battery: " + this.battery;
