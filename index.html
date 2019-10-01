@@ -109,7 +109,9 @@
                 this.prewriteText = txtArea.value;
                 txtArea.value = "";
                 this.battery -= 5;
+                this.checkBattery();
                 batt.innerText = "Batterry: " + this.getBattery();
+                status.innerText = "Status: "+this.status;
             }
 
         }
@@ -120,22 +122,27 @@
                     for (let i = 0; i < nokia.inbox.length; i++) {
                         disText.innerHTML += '<tr><td>' + (i + 1) + '</td><td>' + nokia.inbox[i] + '</td></tr>';
                     }
-                    this.battery -= 5;
-                    batt.innerText = "Batterry: " + nokia.getBattery();
                 } else {
                     for (let i = 0; i < iphone.inbox.length; i++) {
                         disText.innerHTML += '<tr><td>' + (i + 1) + '</td><td>' + iphone.inbox[i] + '</td></tr>';
                     }
-                    this.battery -= 5;
-                    batt.innerText = "Batterry: " + iphone.getBattery();
                 }
+                this.battery -= 5;
+                this.checkBattery();
+                batt.innerText = "Batterry: " + this.getBattery();
+                status.innerText = "Status: "+this.status;
+
             }
         }
         this.loadSavedText = function () {
-            let txtArea = document.getElementById("txtArea");
-            txtArea.value = this.prewriteText;
-            this.battery -= 5;
-            batt.innerText = "Batterry: " + this.getBattery();
+            if(this.status =="on"){
+                let txtArea = document.getElementById("txtArea");
+                txtArea.value = this.prewriteText;
+                this.battery -= 5;
+                this.checkBattery();
+                batt.innerText = "Batterry: " + this.getBattery();
+                status.innerText = "Status: "+this.status;
+            }
         }
         this.sendText = function () {
             if (this.status == "on") {
@@ -151,7 +158,9 @@
                     txtArea.value = "";
                 }
                 this.battery -= 5;
+                this.checkBattery();
                 batt.innerText = "Batterry: " + this.getBattery();
+                status.innerText = "Status: "+this.status;
             }
         }
         this.checkOutbox = function () {
@@ -168,7 +177,14 @@
                 }
                 this.battery -= 5;
                 batt.innerText = "Batterry: " + this.getBattery();
+                this.checkBattery();
+                status.innerText = "Status: "+this.status;
 
+            }
+        }
+        this.checkBattery = function () {
+            if(this.battery == 0){
+                this.status = "off";
             }
         }
     }
